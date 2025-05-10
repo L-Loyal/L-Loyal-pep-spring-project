@@ -1,5 +1,8 @@
 package com.example.service;
 
+import java.util.Optional;
+
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +38,20 @@ public class AccountService {
         else {
 
             throw new RegistrationException("Username is too short");
+        }
+    }
+
+    public Account loginAccount (Account account) throws AuthenticationException {
+
+        Optional<Account> optionalAccount = accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+
+        if (optionalAccount.isPresent()) {
+
+            return optionalAccount.get();
+        }
+        else {
+
+            throw new AuthenticationException("Username and/or password in.");
         }
     }
 }

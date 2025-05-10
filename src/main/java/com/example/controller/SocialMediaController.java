@@ -1,11 +1,13 @@
 package com.example.controller;
 
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
+import com.example.entity.Message;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 
@@ -32,8 +34,24 @@ public class SocialMediaController {
     @PostMapping("register")
     public ResponseEntity<Account> registerHandler (@RequestBody Account account) {
 
-        Account registeredUser =  accountService.registerAccount(account);
+        Account registeredUser = accountService.registerAccount(account);
 
         return ResponseEntity.ok(registeredUser);
-    } 
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<Account> loginHandler (@RequestBody Account account) throws AuthenticationException {
+
+        Account loggedUser = accountService.loginAccount(account);
+
+        return ResponseEntity.ok(loggedUser);
+    }
+
+    @PostMapping("messages")
+    public ResponseEntity<Message> createMessageHandler (@RequestBody Message message) {
+        
+        Message createdMessage = messageService.createMessage(message);
+
+        return ResponseEntity.ok(createdMessage);
+    }
 }
