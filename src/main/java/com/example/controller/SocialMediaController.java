@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,6 +77,21 @@ public class SocialMediaController {
         if (retrievedMessage.isPresent()) {
 
             return ResponseEntity.ok(retrievedMessage.get());
+        }
+        else {
+
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    @DeleteMapping("messages/{messageId}")
+    public ResponseEntity<Integer> deleteMessageByIdHandler (@PathVariable int messageId) {
+
+        Integer rowUpdated = messageService.deleteMessageById(messageId);
+
+        if (rowUpdated == 1) {
+
+            return ResponseEntity.ok(rowUpdated);
         }
         else {
 
