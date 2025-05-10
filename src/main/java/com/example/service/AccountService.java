@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Account;
+import com.example.exception.DuplicateAccountException;
+import com.example.exception.RegistrationException;
 import com.example.repository.AccountRepository;
 
 @Service
@@ -17,13 +19,22 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account registerAccount (Account account) {
+    public Account registerAccount (Account account) throws DuplicateAccountException, RegistrationException {
 
-        if (account.getUsername().length() >= 4 && !accountRepository.findByUsername(account.getUsername()).isPresent()) {
+        if (account.getUsername().length() >= 4) {
 
-            return accountRepository.save(account);
+            if (!accountRepository.findByUsername(account.getUsername()).isPresent()) {
+                
+                return accountRepository.save(account);
+            }
+            else {
+
+                throw new DuplicateAccountException(account.getUsername() + " is already in use.");
+            }
         }
+        else {
 
-        return null;
+            throw new RegistrationException("Username is too short");
+        }
     }
 }
