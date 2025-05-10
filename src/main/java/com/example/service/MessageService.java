@@ -1,6 +1,5 @@
 package com.example.service;
 
-import org.apache.tomcat.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +8,7 @@ import com.example.exception.BadMessageException;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 
-import javassist.NotFoundException;
+import java.util.List;
 
 @Service
 public class MessageService {
@@ -37,5 +36,10 @@ public class MessageService {
 
             throw new BadMessageException("Message may be too long, blank, or not posted by a registered user.");
         }
+    }
+
+    public List<Message> getAllMessages () {
+
+        return messageRepository.findAll();
     }
 }
