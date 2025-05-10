@@ -1,12 +1,14 @@
 package com.example.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -97,5 +99,13 @@ public class SocialMediaController {
 
             return ResponseEntity.ok(null);
         }
+    }
+
+    @PatchMapping("messages/{messageId}")
+    public ResponseEntity<Integer> updateMessageByIdHandler (@PathVariable int messageId, @RequestBody Map<String, String> message) {
+
+        Integer rowUpdated = messageService.updateMessageById(messageId, message);
+
+        return ResponseEntity.ok(rowUpdated);
     }
 }

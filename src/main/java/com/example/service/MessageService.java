@@ -11,6 +11,7 @@ import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MessageService {
@@ -61,6 +62,37 @@ public class MessageService {
         else {
 
             return 0;
+        }
+    }
+
+    public Integer updateMessageById (int messageId, Map<String, String> newText) {
+
+        Optional<Message> optionalMessage = messageRepository.findById(messageId);
+
+        if (optionalMessage.isPresent()) {
+
+            if (newText.get("messageText").isBlank()) {
+
+                throw new BadMessageException("Message is blank");
+            }
+            else if (newText.get("messageText").length() > 255) {
+
+                throw new BadMessageException("Message may be too long");
+            }
+            else {
+
+                Message message = optionalMessage.get();
+
+                message.setMessageText(newText.get("messageText"));
+
+                messageRepository.save(message);
+
+                return 1;
+            }
+        }
+        else {
+
+            throw new BadMessageException("Message was not found by this ID.");
         }
     }
 }
