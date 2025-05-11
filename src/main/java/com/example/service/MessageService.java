@@ -29,15 +29,22 @@ public class MessageService {
 
     public Message createMessage (Message message) {
 
-        if (accountRepository.findById(message.getPostedBy()).isPresent() 
-            && !message.getMessageText().isBlank() 
-            && message.getMessageText().length() <= 255) {
+        if (accountRepository.findById(message.getPostedBy()).isPresent()) {
+
+            if (message.getMessageText().isBlank()) {
+
+                throw new BadMessageException("Message cannot be blank.");
+            }
+            else if (message.getMessageText().length() > 255) {
+
+                throw new BadMessageException("Message cannot exceed 255 characters.");
+            }   
             
             return messageRepository.save(message);
         }
         else {
 
-            throw new BadMessageException("Message may be too long, blank, or not posted by a registered user.");
+            throw new BadMessageException("Message's user Id not recognized.");
         }
     }
 
@@ -73,11 +80,11 @@ public class MessageService {
 
             if (newText.get("messageText").isBlank()) {
 
-                throw new BadMessageException("Message is blank");
+                throw new BadMessageException("Message cannot be blank.");
             }
             else if (newText.get("messageText").length() > 255) {
 
-                throw new BadMessageException("Message may be too long");
+                throw new BadMessageException("Message cannot exceed 255 characters.");
             }
             else {
 
@@ -94,5 +101,10 @@ public class MessageService {
 
             throw new BadMessageException("Message was not found by this ID.");
         }
+    }
+
+    public List<Message> getAllMessagesByUser (int userId) {
+
+        return messageRepository.findAllByPostedBy(userId);
     }
 }
