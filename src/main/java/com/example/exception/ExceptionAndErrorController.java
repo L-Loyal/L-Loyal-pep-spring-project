@@ -1,6 +1,7 @@
 package com.example.exception;
 
 import org.apache.tomcat.websocket.AuthenticationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
